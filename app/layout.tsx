@@ -3,6 +3,8 @@ import { Geist, Geist_Mono, BIZ_UDMincho } from "next/font/google";
 import "./globals.css";
 import Sidebar from "../components/Sidebar";
 
+
+
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 const bizMincho = BIZ_UDMincho({ weight: ['400', '700'], subsets: ['latin'], variable: '--font-mincho' });

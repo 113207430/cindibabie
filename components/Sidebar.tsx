@@ -1,11 +1,31 @@
 "use client"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Sidebar() {
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    audioRef.current = new Audio('/webgm.mp3');
+    audioRef.current.loop = true;
+    return () => {
+      audioRef.current?.pause();
+    };
+  }, []);
+
+  const toggleAudio = () => {
+    if (!audioRef.current) return;
+    if (playing) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setPlaying(!playing);
+  };
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 1024);
@@ -15,7 +35,26 @@ export default function Sidebar() {
   }, []);
 
   const sidebarContent = (
-    <div className="w-[280px] h-full p-4" style={{ backgroundColor: '#482a1d', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '3px' }}>
+    <div className="w-[280px] h-full p-4" style={{ backgroundColor: '#482a1d', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', paddingTop: '16px', gap: '3px' }}>
+      {/* 音樂控制按鈕 - 左上角 */}
+      <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '4px' }}>
+        <div
+          onClick={toggleAudio}
+          style={{ cursor: 'pointer', transition: 'transform 0.2s ease' }}
+          onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.15)')}
+          onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+          title={playing ? '關閉音樂' : '開啟音樂'}
+        >
+          <Image
+            src={playing ? '/horn1.png' : '/horn2.png'}
+            alt={playing ? '音樂開啟' : '音樂關閉'}
+            width={45}
+            height={45}
+            style={{ objectFit: 'contain' }}
+          />
+        </div>
+      </div>
+
       <Link href="/home" onClick={() => setMenuOpen(false)}>
         <div className="flex justify-center items-center w-full" id="work-1">
           <Image src="/cdbb.png" alt="avatar" width={100} height={100} />
